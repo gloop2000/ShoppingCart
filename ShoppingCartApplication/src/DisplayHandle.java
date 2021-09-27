@@ -1,5 +1,6 @@
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Scanner;
 
 public class DisplayHandle {
 	public static boolean isLoggedIn = false;
@@ -24,10 +25,10 @@ public class DisplayHandle {
 		if (isLoggedIn)
 			System.out.print("Sharath");
 		else {
-			System.out.printf("%s", "Sign in. (Enter 'L' to Sign in)\n");
+			System.out.printf("%s", "Sign in.\n");
 		}
 		System.out.println();
-		String[] headings = { "Product Code", "Name", "In Stock (kg)", "Price (₹/kg)" };
+		String[] headings = { "Product Code", "Name", "In Stock (kg)", "Price (Rs/kg)" };
 		for (String heading : headings) {
 			System.out.printf("|%" + COLUMN_GAP + "s", heading);
 		}
@@ -46,8 +47,27 @@ public class DisplayHandle {
 		}
 	}
 	
-	public static void loginDisplay() {
+	public static void appDisplayMenu(Scanner inputScanner) {
+		System.out.printf("\n%20s", "Main Menu\n");
+		System.out.printf("%" + COLUMN_GAP + "s - Add Item to cart\n"
+				+"%" + COLUMN_GAP + "s - Login\n"
+				+"%" + COLUMN_GAP + "s - Purchase\n"
+				+"Enter Your Choice: "
+				,"Product Code","L","P");
+		InputHandle.handleMenuInput(inputScanner);
+	}
+	
+	public static void userHandleDisplay(Scanner inputScanner) {
 //		clearScreen();
-		
+		System.out.printf("Are you an existing user (y/n): ");
+		if(InputHandle.handleExistingUserStatus(inputScanner) == 'L') {
+			System.out.printf("%s", "Enter Login Credentials\n");
+			InputHandle.handleExistingUserLogin(inputScanner);
+		}
+		else {
+			System.out.printf("%s", "Enter Your Credentials:\n");
+			InputHandle.handleNewUserLogin(inputScanner);
+			System.out.printf("%s", "User Added!:\n");
+		}
 	}
 }
