@@ -4,21 +4,31 @@ import java.util.Scanner;
 public class InputHandle {
 
 	private static SQLHandle sqlHandler;
-
-	public static void handleMenuInput(Scanner inputScanner) {
+	
+	private static Scanner inputScanner;
+	
+	public InputHandle(Scanner inputScanner) {
+		this.inputScanner = inputScanner;
+	}
+	
+	public static void handleMenuInput() {
 		String inputString = inputScanner.next();
 		char firstCharacter = inputString.charAt(0);
 		if (isCharacter(firstCharacter)) {
 			// handle login or Purchase
 			if(firstCharacter == 'L')
-				handleExistingUserStatus(inputScanner);
+				handleExistingUserStatus();
+			else if(firstCharacter == 'P') {
+				//handle Purchase
+			}
+				
 		} else {
 			// handleItemAddition
-			handleItemAddition(Integer.parseInt(inputString), inputScanner);
+			handleItemAddition(Integer.parseInt(inputString));
 		}
 	}
 
-	public static char handleExistingUserStatus(Scanner inputScanner) {
+	public static char handleExistingUserStatus() {
 		String inputString = inputScanner.next();
 		char firstCharacter = inputString.charAt(0);
 		if (firstCharacter == 'Y' || firstCharacter == 'y') {
@@ -31,7 +41,7 @@ public class InputHandle {
 
 	}
 
-	public static void handleNewUserLogin(Scanner inputScanner) {
+	public static void handleNewUserLogin() {
 		String userName, password, phoneNumber;
 		System.out.print("Enter User Name: ");
 		userName = inputScanner.next();
@@ -52,7 +62,7 @@ public class InputHandle {
 		}
 	}
 
-	public static void handleExistingUserLogin(Scanner inputScanner) {
+	public static void handleExistingUserLogin() {
 		String userName,Password;
 		System.out.print("Enter User Name: ");
 		userName = inputScanner.next();
@@ -80,7 +90,7 @@ public class InputHandle {
 		return false;
 	}
 
-	private static void handleItemAddition(int productCode, Scanner inputScanner) {
+	private static void handleItemAddition(int productCode) {
 		float quantity = 0f;
 		System.out.println("Enter the quantity of item you wish to buy: ");
 		quantity = inputScanner.nextFloat();
@@ -98,9 +108,5 @@ public class InputHandle {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	}
-
-	public static void main(String[] args) {
-
 	}
 }

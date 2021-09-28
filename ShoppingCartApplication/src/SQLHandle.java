@@ -6,7 +6,6 @@ import java.sql.Statement;
 
 public class SQLHandle {
 	static final String ConnectionURL = "jdbc:derby:C:\\Users\\ssrvk\\MyDB;create=true";
-	
 	private Connection dbConnection;
 	private Statement sqlStatement;
 	
@@ -37,18 +36,26 @@ public class SQLHandle {
 	}
 	
 	public boolean canBuyItem(int productCode, float quantity) throws SQLException{
-		String query = "SELECT ID,STOCK FROM FruitVendorAppData.fruits WHERE ID = "+productCode;
+		String query = "SELECT ID,STOCK,Price FROM FruitVendorAppData.fruits WHERE ID = "+productCode;
 		ResultSet queryResult = sqlStatement.executeQuery(query);
 		if(queryResult.next()) {
 			float currentStock = queryResult.getFloat("Stock");
 			if(currentStock >= quantity) {
+				float itemPrice = queryResult.getFloat("Price");
 				currentStock -= quantity;
 				String updateQuery = "UPDATE FruitVendorAppData.fruits SET STOCK="+currentStock+"WHERE ID="+productCode;
 				sqlStatement.executeUpdate(updateQuery);
+				addOrder(0, productCode, quantity, itemPrice*quantity);
 				return true;
 			}	
 		}
 		return false;
+	}
+	
+	public void addOrder(int userID,int productID, float quantity,float price) throws SQLException {
+		String query = "insert into FruitVendorAppData.Orders values "
+				+ "("+userID+","+productID+","+quantity+","+price+")";
+		sqlStatement.executeUpdate(query);
 	}
 	
 	public static void main(String[] args) throws SQLException, ClassNotFoundException {

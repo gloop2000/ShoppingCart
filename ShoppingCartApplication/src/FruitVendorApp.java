@@ -4,12 +4,13 @@ import java.util.Scanner;
 public class FruitVendorApp {
 	
 	public static void main(String[] args) throws ClassNotFoundException, SQLException {
-		//Welcome
 		Scanner inputScanner = new Scanner(System.in);
+		InputHandle inputHandler = new InputHandle(inputScanner);
+		
 		//Main Screen
 		DisplayHandle.appDisplayWelcome(); 
 		DisplayHandle.appDisplayItems();
-		DisplayHandle.appDisplayMenu(inputScanner);
+		DisplayHandle.appDisplayMenu();
 		
 		//Display Screen
 //		DisplayHandle.userHandleDisplay(inputScanner);

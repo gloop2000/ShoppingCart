@@ -47,27 +47,28 @@ public class DisplayHandle {
 		}
 	}
 	
-	public static void appDisplayMenu(Scanner inputScanner) {
+	public static void appDisplayMenu() {
 		System.out.printf("\n%20s", "Main Menu\n");
 		System.out.printf("%" + COLUMN_GAP + "s - Add Item to cart\n"
 				+"%" + COLUMN_GAP + "s - Login\n"
 				+"%" + COLUMN_GAP + "s - Purchase\n"
 				+"Enter Your Choice: "
 				,"Product Code","L","P");
-		InputHandle.handleMenuInput(inputScanner);
+		InputHandle.handleMenuInput();
 	}
 	
-	public static void userHandleDisplay(Scanner inputScanner) {
+	public static void userHandleDisplay() {
 //		clearScreen();
 		System.out.printf("Are you an existing user (y/n): ");
-		if(InputHandle.handleExistingUserStatus(inputScanner) == 'L') {
+		if(InputHandle.handleExistingUserStatus() == 'L') {
 			System.out.printf("%s", "Enter Login Credentials\n");
-			InputHandle.handleExistingUserLogin(inputScanner);
+			InputHandle.handleExistingUserLogin();
 		}
 		else {
 			System.out.printf("%s", "Enter Your Credentials:\n");
-			InputHandle.handleNewUserLogin(inputScanner);
+			InputHandle.handleNewUserLogin();
 			System.out.printf("%s", "User Added!:\n");
 		}
 	}
+	
 }
