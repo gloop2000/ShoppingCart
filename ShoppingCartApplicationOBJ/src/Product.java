@@ -14,6 +14,11 @@ public class Product {
         this.productQuantity = 0d;
     }
     
+    public Product(Integer productID, Double productQuantity) {
+    	this.productID = productID;
+    	this.productQuantity = productQuantity;
+    }
+    
     public String getName() {
         return productName;
     }
@@ -35,10 +40,20 @@ public class Product {
     }
     
     public void setQuantity(Double quantity) {
-    	this.productQuantity += quantity;
+    	this.productQuantity = quantity;
     }
     
     public Integer getPid() {
         return productID;
     }
+    
+    public void removeFromStock(double quantity) {
+    	this.setQuantity(this.productQuantity + quantity);
+    	this.setStock(this.productStock - quantity);
+	}
+	
+	public void addToStock(double quantity) {
+		this.setQuantity(this.productQuantity - quantity);
+		this.setStock(this.productStock + quantity);
+	}
 }

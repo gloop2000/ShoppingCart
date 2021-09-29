@@ -7,6 +7,7 @@ public class Cart {
 	
 	public void addProductToCartByPID(int productID, double quantity) {
         Product currentProduct = products.getProductByProductID(productID, quantity);
+        currentProduct.removeFromStock(quantity);
         addToCart(currentProduct);
     }
 	
@@ -14,9 +15,14 @@ public class Cart {
         cartItems.add(currentProduct);
     }
 	
-	public void removeProductByPID(int productID) {
-        Product currentProduct = products.get(productID);
-        cartItems.remove(currentProduct);
+	public void removeProductByPID(int productID,double quantity) {
+        Product currentProduct = products.getProductByProductID(productID, quantity);
+        if(currentProduct != null) {
+        	currentProduct.addToStock(quantity);
+        	if(currentProduct.getQuantity() == 0)
+        		cartItems.remove(currentProduct);
+        }
+        	
     }
 	
 	public int numberOfItemsInCart() {

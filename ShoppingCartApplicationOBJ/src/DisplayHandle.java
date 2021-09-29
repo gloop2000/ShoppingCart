@@ -60,7 +60,6 @@ public class DisplayHandle {
 					displayStoreProductInnerChoice();
 					break;
 				case 2:
-//                    userCart.printCartItems();
 					printCartItems();
                     break;
                 case 0:
@@ -93,16 +92,14 @@ public class DisplayHandle {
 	}
 
 	private void addProductToCart() {
-		int[] addToCartValues = inputHandler.getProductInput();
-		int productID = addToCartValues[0];
-		int quantity = addToCartValues[1];
-		userCart.addProductToCartByPID(productID,quantity);
+		Product tempProduct = inputHandler.getProductInput();
+		userCart.addProductToCartByPID(tempProduct.getPid(),tempProduct.getQuantity());
 		System.out.println("Item Added");
 	}
 
 	private void removeProductFromCart() {
-		int pid = inputHandler.getMenuInput();
-		userCart.removeProductByPID(pid);
+		Product tempProduct = inputHandler.getProductInput();
+		userCart.removeProductByPID(tempProduct.getPid(),tempProduct.getQuantity());
 		System.out.println("Item Removed");
 	}
 	

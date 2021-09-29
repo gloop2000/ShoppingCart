@@ -40,12 +40,12 @@ public class ProductList<E> extends ArrayList<E> {
 	private boolean isInStock(Product currentProduct, double quantity) {
 		double currentStock = currentProduct.getStock();
 		if( currentStock > quantity) {
-			currentProduct.setQuantity(quantity);
-			currentProduct.setStock(currentStock - quantity);
 			return true;
 		}
 		return false;
 	}
+	
+	
 	
 //	public List<Product> updateProduct(int pid)
 }

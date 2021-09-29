@@ -13,12 +13,12 @@ public class InputHandle {
         return choice;
     }
 	
-	public int[] getProductInput() {
+	public Product getProductInput() {
 		System.out.print("Enter product code: ");
 		int productId = inputScanner.nextInt();
 		System.out.print("Enter Quantity: ");
-		int quantity = inputScanner.nextInt();
-		int[] addToCartValues = {productId,quantity};
-		return addToCartValues;
+		double quantity = inputScanner.nextDouble();
+		Product tempProduct = new Product(productId, quantity);
+		return tempProduct;
 	}
 }
