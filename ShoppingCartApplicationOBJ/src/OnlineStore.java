@@ -6,8 +6,8 @@ import java.util.Map.Entry;
 
 public class OnlineStore {
 	
-	static ProductList myStoreProducts = new ProductList();
-	static UserMap myStoreUsers = new UserMap();
+	ProductList myStoreProducts = new ProductList();
+	UserMap myStoreUsers = new UserMap();
 	Cart userCart = new Cart();
 	
 	//Map User to Cart

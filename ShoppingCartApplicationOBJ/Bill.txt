@@ -1,5 +1,5 @@
                                Bill
-User Id: 3                           User Name: srikanth
+User Id: 1                            User Name: sharath
 |Name           |Quantity       |Price (Rs/kg)  
 |Apple          |1.0            |100.0          
 |Grand Total    :100.0          

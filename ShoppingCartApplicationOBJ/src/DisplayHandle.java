@@ -126,8 +126,9 @@ public class DisplayHandle {
 			System.out.printf("|%" + COLUMN_GAP + "s", currentProduct.getName());
 			System.out.printf("|%" + COLUMN_GAP + "s", productQuantity);
 			System.out.printf("|%" + COLUMN_GAP + "s", currentProduct.getPrice());
-			System.out.printf("|%" + COLUMN_GAP + "s", currentProduct.getPrice() * productQuantity);
+			System.out.printf("|%" + COLUMN_GAP + "s\n", currentProduct.getPrice() * productQuantity);
 		}
+		System.out.println("Grand Total:" + myFruitStore.userCart.grandTotal);
 	}
 
 	private void displayLoginInnerChoice() {

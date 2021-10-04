@@ -34,7 +34,7 @@ public class ProductList {
 		double currentStock = productsInStore.get(currentProduct);
 		if (currentStock == 0)
 			return false;
-		if (currentStock > quantityRequested)
+		if (currentStock < quantityRequested)
 			return false;
 		return true;
 	}
