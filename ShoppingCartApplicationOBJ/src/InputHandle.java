@@ -13,13 +13,15 @@ public class InputHandle {
         return choice;
     }
 	
-	public Product getProductInput() {
+	public Object[] getProductInput() {
 		System.out.print("Enter product code: ");
 		int productId = inputScanner.nextInt();
 		System.out.print("Enter Quantity: ");
 		double quantity = inputScanner.nextDouble();
-		Product tempProduct = new Product(productId, quantity);
-		return tempProduct;
+		Object[] productInput = new Object[2];
+		productInput[0] = productId;
+		productInput[1] = quantity;
+		return productInput;
 	}
 	
 	public String[] getUserInput() {

@@ -1,25 +1,38 @@
-import java.util.List;
+import java.io.IOException;
+import java.util.Map;
 
 public class DisplayHandle {
-
-	Cart userCart = new Cart();
+	
 	private int choice = 0;
 	private int innerChoice;
-//	private boolean isLoggedIn = false;
 	private InputHandle inputHandler;
+	private OnlineStore myFruitStore;
 	public static final short COLUMN_GAP = -15;
 
-	public DisplayHandle(InputHandle inputHandler) {
+	public DisplayHandle(InputHandle inputHandler, OnlineStore myFruitStore) {
 		this.inputHandler = inputHandler;
-		mainMenu();
+		this.myFruitStore = myFruitStore;
+	}
+	
+	public void clearScreen() {  
+		try {
+			new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}  
 	}
 
 	public void startScreen() {
+		clearScreen();
 		System.out.printf("%50s", "Welcome To Fruit Vendor App\n");
-		System.out.printf("%s", "Items in cart: " + userCart.numberOfItemsInCart());
+		System.out.printf("%s", "Items in cart: " + myFruitStore.getNumberOfItemsInCart());
 		System.out.printf("%45s", "Hello, ");
-		if (userCart.isUserLoggedIn())
-			System.out.printf("%s\n",userCart.currentUser.getUserName());
+		if (myFruitStore.hasUserLoggedIn())
+			System.out.printf("%s\n",myFruitStore.currentUser.getUserName());
 		else {
 			System.out.printf("%s", "Sign in.\n");
 		}
@@ -27,7 +40,7 @@ public class DisplayHandle {
 
 	public void startMenu() {
 		System.out.printf("%35s", "Main Menu\n");
-		if(userCart.isUserLoggedIn()) {
+		if(myFruitStore.hasUserLoggedIn()) {
 			System.out.printf("1. Display Store Products\t 2. Display Cart\t 3. Purchase\t 0. Exit\n");
 		}
 		else {
@@ -44,12 +57,14 @@ public class DisplayHandle {
 			System.out.printf("|%" + COLUMN_GAP + "s", heading);
 		}
 		System.out.println();
-		List<Product> products = userCart.products.getProducts();
-		for (Product product : products) {
-			System.out.printf("|%" + COLUMN_GAP + "s", product.getPid());
-			System.out.printf("|%" + COLUMN_GAP + "s", product.getName());
-			System.out.printf("|%" + COLUMN_GAP + "s", product.getPrice());
-			System.out.printf("|%" + COLUMN_GAP + "s\n", product.getStock());
+		Map<Product, Double> products = myFruitStore.getStoreProductDetails(); 
+		for (Map.Entry<Product, Double> productMap : products.entrySet()) {
+			Product currentProduct = productMap.getKey();
+			double productStock = productMap.getValue();
+			System.out.printf("|%" + COLUMN_GAP + "s", currentProduct.getPid());
+			System.out.printf("|%" + COLUMN_GAP + "s", currentProduct.getName());
+			System.out.printf("|%" + COLUMN_GAP + "s", currentProduct.getPrice());
+			System.out.printf("|%" + COLUMN_GAP + "s\n", productStock);
 		}
 	}
 
@@ -59,6 +74,7 @@ public class DisplayHandle {
 	}
 
 	public void storeLoginMenu() {
+		clearScreen();
 		System.out.printf("%35s", "Login Menu\n");
 		System.out.printf("1. Login\t 2. New User Registration\t 0. Exit\n");
 	}
@@ -77,13 +93,13 @@ public class DisplayHandle {
 				printCartItems();
 				break;
 			case 3:
-				if(!userCart.isUserLoggedIn())
+				if(!myFruitStore.hasUserLoggedIn())
 					displayLoginInnerChoice();
 				else
 					//purchase
-					if(canPurchaseItems()) {
+					if(myFruitStore.canPurchaseItems()) {
 						printCartItems();
-						userCart.writeToBill();
+						myFruitStore.writeToBill();
 						System.exit(0);
 					}
 				break;
@@ -96,9 +112,26 @@ public class DisplayHandle {
 		} while (choice != 0);
 	}
 
+	private void printCartItems() {
+		// TODO Auto-generated method stub
+		String[] headings = {"Name", "Quantity", "Price (Rs/kg)", "Total"};
+		for (String heading : headings) {
+			System.out.printf("|%" + COLUMN_GAP + "s", heading);
+		}
+		System.out.println();
+		Map<Product,Double> productsInCart = myFruitStore.getCartProductDetails();
+		for(Map.Entry<Product,Double> productMap: productsInCart.entrySet()) {
+			Product currentProduct = productMap.getKey();
+			double productQuantity = productMap.getValue();
+			System.out.printf("|%" + COLUMN_GAP + "s", currentProduct.getName());
+			System.out.printf("|%" + COLUMN_GAP + "s", productQuantity);
+			System.out.printf("|%" + COLUMN_GAP + "s", currentProduct.getPrice());
+			System.out.printf("|%" + COLUMN_GAP + "s", currentProduct.getPrice() * productQuantity);
+		}
+	}
+
 	private void displayLoginInnerChoice() {
 		// TODO Auto-generated method stub
-//		int innerChoice = 0;
 		storeLoginMenu();
 		innerChoice = inputHandler.getMenuInput();
 		switch (innerChoice) {
@@ -115,8 +148,27 @@ public class DisplayHandle {
 		}
 	}
 
+	private void registerUser() {
+		// TODO Auto-generated method stub
+		String[] userCredentials = inputHandler.getUserInput();
+		String userName = userCredentials[0];
+		String userPassword = userCredentials[1];
+		myFruitStore.addNewUserToUserMap(userName, userPassword);
+	}
+
+	private void loginUser() {
+		// TODO Auto-generated method stub
+		String[] userCredentials = inputHandler.getUserInput();
+		String userName = userCredentials[0];
+		String userPassword = userCredentials[1];
+		if(myFruitStore.isValidUser(userName, userPassword)) {
+			System.out.println("Logged In");
+		}
+		else
+			System.out.println("UserName or Password is wrong");
+	}
+	
 	public void displayStoreProductInnerChoice() {
-//		int innerChoice = 0;
 		displayStoreProducts();
 		do {
 			storeProductsMenu();
@@ -135,59 +187,28 @@ public class DisplayHandle {
 		} while (innerChoice != 0);
 	}
 
-	private void addProductToCart() {
-		Product tempProduct = inputHandler.getProductInput();
-		userCart.addProductToCartByPID(tempProduct.getPid(), tempProduct.getQuantity());
-		System.out.println("Item Added");
-	}
-
 	private void removeProductFromCart() {
-		Product tempProduct = inputHandler.getProductInput();
-		userCart.removeProductByPID(tempProduct.getPid(), tempProduct.getQuantity());
-		System.out.println("Item Removed");
+		// TODO Auto-generated method stub
+		Object[] productInput = inputHandler.getProductInput();
+		int productID = (int)productInput[0];
+		double productQuantity = (double)productInput[1];
+		Product currentProduct = myFruitStore.getProductByID(productID);
+		myFruitStore.myStoreProducts.addToProductStock(currentProduct, productQuantity);
+		myFruitStore.userCart.removeProductFromCart(currentProduct, productQuantity);
 	}
 
-	private void printCartItems() {
-		String[] headings = { "Name", "Quantity", "Price (Rs/kg)" };
-		for (String heading : headings) {
-			System.out.printf("|%" + COLUMN_GAP + "s", heading);
+	private void addProductToCart() {
+		// TODO Auto-generated method stub
+		Object[] productInput = inputHandler.getProductInput();
+		int productID = (int)productInput[0];
+		double productQuantity = (double)productInput[1];
+		Product currentProduct = myFruitStore.getProductByID(productID);
+		if(myFruitStore.myStoreProducts.isProductInStock(currentProduct, productQuantity)) {
+			myFruitStore.myStoreProducts.removeFromProductStock(currentProduct, productQuantity);
+			myFruitStore.userCart.addProductToCart(currentProduct, productQuantity);
+			System.out.println("Product Added to Cart");
 		}
-		System.out.println();
-		for (Product currentProduct : userCart.cartItems) {
-			System.out.printf("|%" + COLUMN_GAP + "s", currentProduct.getName());
-			System.out.printf("|%" + COLUMN_GAP + "s", currentProduct.getQuantity());
-			System.out.printf("|%" + COLUMN_GAP + "s\n", (currentProduct.getPrice() * currentProduct.getQuantity()));
-		}
-		System.out.println();
-		System.out.printf("|%" + COLUMN_GAP + "s", "Grand Total");
-		System.out.printf(":%" + COLUMN_GAP + "s\n", userCart.getGrandTotal());
-	}
-	
-	private void loginUser() {
-		String[] userDetails = inputHandler.getUserInput();
-		String userName = userDetails[0];
-		String userPassword = userDetails[1];
-		if(userCart.assignExistingUserToCart(userName, userPassword))
-			System.out.println("Logged In");
 		else
-			System.out.println("Incorrect User Name or Password");
-	}
-	
-	private void registerUser() {
-		String[] userDetails = inputHandler.getUserInput();
-		String userName = userDetails[0];
-		String userPassword = userDetails[1];
-		userCart.assignNewUserToCart(userName, userPassword);
-		System.out.println("Registered Successfully");
-	}
-	
-	private boolean canPurchaseItems() {
-		if(userCart.numberOfItemsInCart()==0) {
-			System.out.println("There are no items in Cart");
-			return false;
-		}
-		else {
-			return true;
-		}
+			System.out.println("Could not add product to Cart, Please reduce quantity." + myFruitStore.myStoreProducts.getProductStock(currentProduct));
 	}
 }

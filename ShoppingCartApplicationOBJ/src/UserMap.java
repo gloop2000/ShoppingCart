@@ -1,40 +1,41 @@
 import java.util.HashMap;
 import java.util.Map;
 
-public class UserMap<K, V> extends HashMap<K, V>{
+public class UserMap {
+	// Map names to User object
+	private static Map<String, User> usersOfStore = new HashMap<>();
 	
-	private static final long serialVersionUID = 1L;
-	private Map<String,User> users = new HashMap<>();
+	public UserMap() {
+		// TODO Auto-generated constructor stub
+		this.initializeUsers();
+	}
 	
-	public UserMap(){
-		this.initUsers();
+	// initialize users of store
+	void initializeUsers() {
+		String[] userNames = { "sharath", "vinay" };
+		String[] userPasswords = { "123", "321" };
+		for (int index = 0; index < userNames.length; index++) {
+			usersOfStore.put(userNames[index], new User(userNames[index], userPasswords[index]));
+		}
 	}
 
-	private void initUsers() {
-		// TODO Auto-generated method stub
-		String[] userNames = {"sharath","vinay"};
-		String[] userPasswords = {"123","321"};
-		for(int index=0; index < userNames.length; index++) {
-			this.users.put(userNames[index], new  User(userNames[index], userPasswords[index]));
-		}
-	}
-	
-	public User addUser(String userName, String userPassword) {
-		this.users.put(userName,new User(userName,userPassword));
-		return users.get(userName);
-	}
-	
-	public boolean isValidUser(String userName,String userPassword) {
-		User currentUser = users.get(userName);
-		if(currentUser != null) {
-			String currentPassword = currentUser.getUserPassword();
-			if(currentPassword.equals(userPassword))
-				return true;
-		}
+	// Check if user is valid
+	boolean isUserValid(String userName, String password) {
+		User currentUser = usersOfStore.get(userName);
+		String currentUserPassword = currentUser.getUserPassword();
+		if (password.equals(currentUserPassword))
+			return true;
 		return false;
 	}
 	
-	public User get(String userName) {
-		return users.get(userName);
+	//Add user to Map
+	User addNewUser(String userName, String password) {
+		User newUser = new User(userName,password);
+		usersOfStore.put(userName, newUser);
+		return newUser;
+	}
+	
+	User getUserCredentials(String userName) {
+		return usersOfStore.get(userName);
 	}
 }
