@@ -7,7 +7,7 @@ import java.util.Map.Entry;
 public class OnlineStore {
 	
 	ProductList myStoreProducts = new ProductList();
-	UserMap myStoreUsers = new UserMap();
+	private UserMap myStoreUsers = new UserMap();
 	Cart userCart = new Cart();
 	
 	//Map User to Cart

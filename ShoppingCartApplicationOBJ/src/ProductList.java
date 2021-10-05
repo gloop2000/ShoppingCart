@@ -3,7 +3,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class ProductList {
-	// Map product to their quantities in Store
+	// Map product to their Stock in Store
 	private static Map<Product, Double> productsInStore = new LinkedHashMap<>();
 	Map<Integer, Product> productAndIdMap = new HashMap<>();
 	
