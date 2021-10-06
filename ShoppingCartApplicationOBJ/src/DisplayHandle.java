@@ -194,8 +194,10 @@ public class DisplayHandle {
 		int productID = (int)productInput[0];
 		double productQuantity = (double)productInput[1];
 		Product currentProduct = myFruitStore.getProductByID(productID);
-		myFruitStore.myStoreProducts.addToProductStock(currentProduct, productQuantity);
-		myFruitStore.userCart.removeProductFromCart(currentProduct, productQuantity);
+		if(myFruitStore.hasRemovedProductFromUserCart(currentProduct, productQuantity))
+			System.out.println("Removed From Cart");
+		else
+			System.out.println("Could not remove");
 	}
 
 	private void addProductToCart() {
@@ -204,12 +206,11 @@ public class DisplayHandle {
 		int productID = (int)productInput[0];
 		double productQuantity = (double)productInput[1];
 		Product currentProduct = myFruitStore.getProductByID(productID);
-		if(myFruitStore.myStoreProducts.isProductInStock(currentProduct, productQuantity)) {
-			myFruitStore.myStoreProducts.removeFromProductStock(currentProduct, productQuantity);
-			myFruitStore.userCart.addProductToCart(currentProduct, productQuantity);
+		if(myFruitStore.isProductInStock(currentProduct, productQuantity)) {
+			myFruitStore.addProductToUserCart(currentProduct, productQuantity);
 			System.out.println("Product Added to Cart");
 		}
 		else
-			System.out.println("Could not add product to Cart, Please reduce quantity." + myFruitStore.myStoreProducts.getProductStock(currentProduct));
+			System.out.println("Could not add product to Cart, Please reduce quantity." + myFruitStore.getRequestedProductStock(currentProduct));
 	}
 }

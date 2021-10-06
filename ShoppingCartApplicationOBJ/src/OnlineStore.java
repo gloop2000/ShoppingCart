@@ -6,15 +6,16 @@ import java.util.Map.Entry;
 
 public class OnlineStore {
 	
-	ProductList myStoreProducts = new ProductList();
+	private ProductList myStoreProducts = new ProductList();
 	private UserMap myStoreUsers = new UserMap();
-	Cart userCart = new Cart();
 	
 	//Map User to Cart
-	static Map<User, Cart> cartUsers = new HashMap<>();
+	private static Map<User, Cart> cartUsers = new HashMap<>();
 	
+	Cart userCart = null;
 	User currentUser = null;
 	
+	//Cart methods start
 	Map<Product, Double> getStoreProductDetails() {
 		return myStoreProducts.getAllProductList();
 	}
@@ -28,14 +29,44 @@ public class OnlineStore {
 	}
 	
 	int getNumberOfItemsInCart() {
+		if(userCart == null)
+			return 0;
 		return userCart.getNumberOfItemsInCart();
 	}
 	
 	boolean canPurchaseItems() {
+		if(userCart == null)
+			return false;
 		return getNumberOfItemsInCart() != 0;
 	}
 	
+	boolean isProductInStock(Product currentProduct, double productQuantity) {
+		if(myStoreProducts.isProductInStock(currentProduct, productQuantity))
+			return true;
+		return false;
+	}
 	
+	void addProductToUserCart(Product currentProduct, double productQuantity) {
+		if(userCart==null)
+			userCart = new Cart();
+		myStoreProducts.removeFromProductStock(currentProduct, productQuantity);
+		userCart.addProductToCart(currentProduct, productQuantity);
+	}
+	
+	boolean hasRemovedProductFromUserCart(Product currentProduct, double productQuantity) {
+		if(userCart == null)
+			return false;
+		myStoreProducts.addToProductStock(currentProduct, productQuantity);
+		userCart.removeProductFromCart(currentProduct, productQuantity);
+		return true;
+	}
+	
+	double getRequestedProductStock(Product currentProduct) {
+		return myStoreProducts.getProductStock(currentProduct);
+	}
+	//Cart Method End
+	
+	//User Start
 	boolean isValidUser(String userName, String userPassword) {
 		if(myStoreUsers.isUserValid(userName, userPassword)) {
 			currentUser = myStoreUsers.getUserCredentials(userName);
@@ -59,6 +90,7 @@ public class OnlineStore {
 	void addNewUserToUserMap(String userName, String userPassword) {
 		currentUser = myStoreUsers.addNewUser(userName, userPassword);
 	}
+	//User End
 	
 	public void writeToBill() {
 		String headingString = String.format("%35s\n", "Bill");

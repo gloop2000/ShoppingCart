@@ -14,7 +14,7 @@ public class ProductList {
 
 	// initialize products in store
 	void initializeProducts() {
-		String[] productNames = { "Apple", "Manoges", "Pear", "Banana", "Grapes" };
+		String[] productNames = { "Apple", "Mangoes", "Pear", "Banana", "Grapes" };
 		Double[] productPrice = { 100.00d, 120.00d, 140.00d, 74.00d, 80.00d };
 		Double[] stock = { 10.0d, 25.0d, 8.0d, 30.0d, 5.0d };
 		for (int index = 0; index < productNames.length; index++) {

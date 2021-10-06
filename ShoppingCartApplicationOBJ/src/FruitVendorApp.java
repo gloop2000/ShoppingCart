@@ -1,9 +1,8 @@
-import java.sql.SQLException;
 import java.util.Scanner;
 
 public class FruitVendorApp {
 	
-	public static void main(String[] args) throws ClassNotFoundException, SQLException {
+	public static void main(String[] args){
 		Scanner inputScanner = new Scanner(System.in);
 		
 		OnlineStore myFruitStore = new OnlineStore();
