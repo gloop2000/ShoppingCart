@@ -41,7 +41,7 @@ public class DisplayHandle {
 	public void startMenu() {
 		System.out.printf("%35s", "Main Menu\n");
 		if(myFruitStore.hasUserLoggedIn()) {
-			System.out.printf("1. Display Store Products\t 2. Display Cart\t 3. Purchase\t 0. Exit\n");
+			System.out.printf("1. Display Store Products\t 2. Display Cart\t 3. Purchase\t 4. Logout\t 0. Exit\n");
 		}
 		else {
 			System.out.printf("%40s", "(Login to Purchase)\n");
@@ -103,6 +103,9 @@ public class DisplayHandle {
 						System.exit(0);
 					}
 				break;
+			case 4:
+				displayUserLogOutStatus();
+				break;
 			case 0:
 				System.exit(0);
 				break;
@@ -110,6 +113,14 @@ public class DisplayHandle {
 				break;
 			}
 		} while (choice != 0);
+	}
+
+	private void displayUserLogOutStatus() {
+		// TODO Auto-generated method stub
+		if(myFruitStore.hasUserLoggedIn())
+			myFruitStore.logOutCurrentUser();
+		else
+			System.out.println("Please login");
 	}
 
 	private void printCartItems() {

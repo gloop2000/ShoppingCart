@@ -1,6 +1,8 @@
                                Bill
 User Id: 1                            User Name: sharath
 |Name           |Quantity       |Price (Rs/kg)  
+|Mangoes        |3.0            |360.0          
+|Banana         |2.0            |148.0          
 |Apple          |1.0            |100.0          
-|Grand Total    :100.0          
+|Grand Total    :608.0          
 Thank you for the purchase. Have a nice day!

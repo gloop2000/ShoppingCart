@@ -100,7 +100,7 @@ public class OnlineStore {
 		String items = "";
 		String thankYouString = "Thank you for the purchase. Have a nice day!";
 		
-		try(FileWriter billWriter = new FileWriter("Bill.txt")){
+		try(FileWriter billWriter = new FileWriter("Bill_"+ currentUser.getUserName() +".txt")){
 			billWriter.write(headingString + userDetails + fruitHeadings);
 			for(Entry<Product, Double> productMap: userCart.getAllProductsInCart().entrySet()) {
 				Product currentProduct = productMap.getKey();
@@ -119,5 +119,12 @@ public class OnlineStore {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+
+	public void logOutCurrentUser() {
+		// TODO Auto-generated method stub
+		cartUsers.put(currentUser, userCart);
+		currentUser =null;
+		userCart = null;
 	}	
 }
